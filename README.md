@@ -1,6 +1,4 @@
-Here is the updated **README** based on the code you've shared, including the **Student** and **Course** entities, and the **Teacher** information:
 
----
 
 # School Management API
 
