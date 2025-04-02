@@ -257,6 +257,4 @@ For any questions or issues, feel free to open an issue on the repository, or re
 ## GitHub Repository
 - [School Management API GitHub Repository](https://github.com/Tondwani/SchoolManagementAPI)
 
----
 
-This updated README includes the **Student**, **Teacher**, and **Course** functionality, along with their respective endpoints, making the API clear and professional. Let me know if you need further modifications!
