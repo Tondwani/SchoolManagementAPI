@@ -5,6 +5,7 @@ using AutoMapper;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AlrightAPI.Models;
+using AlrightAPI.Services;
 
 namespace AlrightAPI.Controllers
 {
@@ -19,9 +20,10 @@ namespace AlrightAPI.Controllers
         {
             _studentRepository = studentRepository; // Automatically injected! dependency Injection 
             _mapper = mapper;
+          
         }
 
-        // GET: api/student
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -30,7 +32,7 @@ namespace AlrightAPI.Controllers
             return Ok(studentDtos);
         }
 
-        // GET: api/student/{id}
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -44,7 +46,7 @@ namespace AlrightAPI.Controllers
             return Ok(studentDto);
         }
 
-        // POST: api/student (Adding a New Student)
+        
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] StudentDto studentDto)
         {
@@ -57,10 +59,10 @@ namespace AlrightAPI.Controllers
             var addedStudent = await _studentRepository.AddAsync(studentEntity);
             var addedStudentDto = _mapper.Map<StudentDto>(addedStudent);
 
-            return Ok(addedStudentDto); // No need for CreatedAtAction since there's no Id in DTO
+            return Ok(addedStudentDto); 
         }
 
-        // PUT: api/student/{id} (Updating an Existing Student)
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] StudentDto studentDto)
         {
@@ -81,18 +83,19 @@ namespace AlrightAPI.Controllers
             return NoContent();
         }
 
-        // DELETE: api/student/{id}
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var existingStudent = await _studentRepository.GetByIdAsync(id);
             if (existingStudent == null)
             {
-                return NotFound($"Student with ID {id} not found.");
+                return NotFound($"Student with ID: {id} not found.");
             }
 
             await _studentRepository.DeleteAsync(id);
             return NoContent();
         }
     }
+
 }

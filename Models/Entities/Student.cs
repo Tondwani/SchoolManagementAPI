@@ -5,14 +5,15 @@ namespace AlrightAPI.Models
     public class Student
     {
         [Key]
-        //public Guid Guid { get; set; } 
-        public int StudentId { get; set; } 
+        public Guid StudentId { get; set; }
         public required string Name { get; set; }
-        public required string lastName { get; set; }
+        public required string LastName { get; set; }
+        public string? Gender { get; set; }
+        public required string NationalIDNumber { get; set; }
+        public required string Password { get; set; }
+        public string Role { get; set; } = "Student";
 
-        // Reference navigation property
-        public int CourseId { get; set; }
-        public Course? Course { get; set; }
-
+       
+        public ICollection<Course> Courses { get; set; } = new List<Course>();
     }
 }

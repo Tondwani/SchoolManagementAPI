@@ -22,7 +22,19 @@ namespace AlrightAPI.Repository
 
         public async Task<Student> GetByIdAsync(int id)
         {
-            return await _context.Students.FindAsync(id);
+            try
+            {
+                var student = await _context.Students.FindAsync(id);
+                if (student == null)
+                {
+                    throw new KeyNotFoundException($"Student with ID: {id} not found.");
+                }
+                return student;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving the student.", ex);
+            }
         }
 
         public async Task<Student> AddAsync(Student Student)
