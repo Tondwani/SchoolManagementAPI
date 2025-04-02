@@ -3,11 +3,16 @@ using AlrightAPI.Data;
 using AlrightAPI.Interface;
 using AlrightAPI.MappingProfiles;
 using AlrightAPI.Repository;
+using AlrightAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace AlrightAPI
 {
-    public class Program
+    public  static class Program
     {
         public static void Main(string[] args)
         {
@@ -22,7 +27,31 @@ namespace AlrightAPI
             // Injecting/Register my IRepository Services in the program.cs for now !! //
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+            builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 
+
+            // JWT Authentication Configuration
+
+            var jwtSettings = builder.Configuration.GetSection("JWTSettings"); // Securely accessing the SecretKey
+
+
+            // Authentication services
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtSettings["Issuer"], //  Who gives the token, In my case it's me(#AlrightAPI) ...Your domian.. where you going to deployed the project
+                        ValidAudience = jwtSettings["Audience"], // / Intended recipient of the token()Usually client-side application/consumers of the API(FrontEnd link)
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SecretKey")) // This is used to sign & validate the JWT, make if it's authentic and hasn't beeen tempered with  
+                    };
+                });
+
+            builder.Services.AddScoped<JwtService>();
             // Auto Mapper  (Registeration)
             builder.Services.AddAutoMapper(typeof(MappingProfiles.MappingProfile));
 
@@ -42,6 +71,7 @@ namespace AlrightAPI
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

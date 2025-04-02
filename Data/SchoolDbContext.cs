@@ -1,6 +1,11 @@
 ﻿using AlrightAPI.Models;
+using AlrightAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace AlrightAPI.Data
 {
@@ -10,7 +15,22 @@ namespace AlrightAPI.Data
         {
 
         }
+        protected SchoolDbContext()
+        {
+        }
+
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Course { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
     }
 }
+
+
+
+
+
+
+
+
+
+
